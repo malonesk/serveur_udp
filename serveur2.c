@@ -7,17 +7,16 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-char* message(char* buf) {
-    char mes[26];
+char* taille(char* buf, char* answer) {
+    char* t = malloc(5*sizeof(char));
     int i=0;
     int cpt=0;
     while (buf[i]!='\0') {
         cpt++;
         i++;
     }
-    sprintf(mes,"Taille du message : %d", cpt);
-    printf("%s",mes);
-    return mes;
+    sprintf(t,"%s<_______%d___>",answer,cpt);
+    return t;
 }
 
 int main(int argc, char* argv[]) {
@@ -60,14 +59,14 @@ int main(int argc, char* argv[]) {
     //buffer[n] = '\0';
 
 /* traitement */
-    char* answer = malloc(65535*sizeof(char));
-    answer=message(buffer);
-
-    if(sendto(sock, answer, strlen(answer), 0, (struct sockaddr *)&from, len) < 0)
+    char* answer = "<taille_message>";
+    char* t=taille(buffer, answer);
+    if(sendto(sock, t, (strlen(t)), 0, (struct sockaddr *)&from, len) < 0)
     {
         perror("sendto()");
         exit(1);
     }
+
 
     exit(0);
 }
