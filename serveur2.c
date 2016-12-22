@@ -15,7 +15,7 @@ char* taille(char* buf, char* answer) {
         cpt++;
         i++;
     }
-    sprintf(t,"%s<_______%d___>",answer,cpt);
+    sprintf(t,"%s %d octets",answer,cpt);
     return t;
 }
 
@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
 
-    struct sockaddr_in* from=malloc(sizeof(serveurin));
+    struct sockaddr_in from;
     char buffer[65535];
     int n;
 
@@ -53,14 +53,15 @@ int main(int argc, char* argv[]) {
         perror("recvfrom()");
         exit(1);
     } else {
-        printf("Recu : %s\n", buffer);
+        printf("%s %d %s\n", inet_ntoa(from.sin_addr) , ntohs(from.sin_port), buffer);
     }
 
-    //buffer[n] = '\0';
+    sleep(2);
 
 /* traitement */
-    char* answer = "<taille_message>";
+    char* answer = "lu un message de ";
     char* t=taille(buffer, answer);
+  //  sleep(3);
     if(sendto(sock, t, (strlen(t)), 0, (struct sockaddr *)&from, len) < 0)
     {
         perror("sendto()");

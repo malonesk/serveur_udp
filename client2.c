@@ -6,7 +6,14 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
+#include <signal.h>
+#include <stdbool.h>
 
+volatile sig_atomic_t print_flag = false;
+
+void alarm_hand(int sig) {
+    print_flag = true;
+}
 
 int main(int argc, char* argv[]) {
     char* address;
@@ -39,12 +46,19 @@ int main(int argc, char* argv[]) {
     }
     char buf[65535];
     int n;
+    signal(SIGALRM, alarm_hand);
+    alarm(2);
     if((n = recvfrom(sock, buf, sizeof buf, 0, (struct sockaddr*)&to, &len)) < 0)
     {
         perror("recvfrom()");
         exit(1);
+    }
+    if (alarm(2)==0) {
+        printf("Le serveur n'a pas repondu a temps.\n");
+        exit(1);
     } else {
         printf("Reponse : %s\n", buf);
     }
+
     exit(0);
 }
