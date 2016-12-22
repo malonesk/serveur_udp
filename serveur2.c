@@ -6,12 +6,18 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netdb.h>
+
 
 char* taille(char* buf, char* answer) {
     char* t = malloc(5*sizeof(char));
+    if (t==NULL) {
+        perror("malloc");
+        taille(buf, answer);
+    }
     int i=0;
     int cpt=0;
-    while (buf[i]!='\0') {
+    while (buf[i]!='\n') {
         cpt++;
         i++;
     }
@@ -48,15 +54,15 @@ int main(int argc, char* argv[]) {
     char buffer[65535];
     int n;
 
-    if((n = recvfrom(sock, buffer, sizeof buffer, 0, (struct sockaddr *)&from, &len)) < 0)
+    if((n = recvfrom(sock, buffer, sizeof buffer-1, 0, (struct sockaddr *)&from, &len)) < 0)
     {
         perror("recvfrom()");
         exit(1);
     } else {
-        printf("%s %d %s\n", inet_ntoa(from.sin_addr) , ntohs(from.sin_port), buffer);
+        printf("%s %d %s", inet_ntoa(from.sin_addr) , ntohs(from.sin_port), buffer);
     }
 
-    sleep(2);
+    //sleep(2);
 
 /* traitement */
     char* answer = "lu un message de ";
