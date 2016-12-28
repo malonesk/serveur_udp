@@ -10,14 +10,12 @@
 #include <stdbool.h>
 #include <netdb.h>
 
-void alarm_hand(){};
-
 int main(int argc, char* argv[]) {
     char* address;
     int port;
     char buffer[65535];
-    if (argc<3) {
-        perror("USAGE:");
+    if (argc<4) {
+        perror("USAGE: client <adresse> <port> <message>\n");
         exit(1);
     } else {
         address=argv[1];
