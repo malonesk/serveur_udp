@@ -22,7 +22,7 @@ char* createmessage(char* buf) {
 int main(int argc, char* argv[]) {
     int port;
     if (argc != 2) {
-        perror("USAGE:");
+        perror("USAGE: serveur <port>");
         exit(1);
     } else {
         port=atoi(argv[1]);
